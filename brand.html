@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigiFlazz Brand Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="brand-title">DigiFlazz Brand Page</h1>
+    <div id="content-container"></div>
+
+    <script>
+        // Mendapatkan nama brand dari URL
+        const brand = window.location.pathname.slice(1);
+
+        // Mengambil data dari server
+        async function fetchData() {
+            const response = await fetch('/price-list');
+            const data = await response.json();
+            return data;
+        }
+
+        // Menampilkan data untuk brand tertentu
+        async function displayBrandData() {
+            const data = await fetchData();
+            const brandData = data[brand];
+            const contentContainer = document.getElementById('content-container');
+            document.getElementById('brand-title').innerText = brand.replace(/-/g, ' ').toUpperCase();
+
+            if (brandData) {
+                brandData.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'item';
+                    itemDiv.innerHTML = `<strong>${item.product_name}</strong><br>Price: ${item.price}<br>Description: ${item.desc}`;
+                    contentContainer.appendChild(itemDiv);
+                });
+            } else {
+                contentContainer.innerHTML = '<p>No data available for this brand.</p>';
+            }
+        }
+
+        // Menampilkan data saat halaman dimuat
+        window.onload = displayBrandData;
+    </script>
+</body>
+</html>
