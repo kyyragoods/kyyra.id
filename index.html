@@ -34,9 +34,10 @@
     <script>
         // Fetch data from the local server
         async function fetchData() {
-            const response = await fetch('http://localhost:3000/price-list');
-            const data = await response.json();
-            return data;
+        const response = await fetch('http://localhost:3000/price-list');
+        const data = await response.json();
+        return data;
+    }
         }
 
         // Create images and buttons based on brand data
