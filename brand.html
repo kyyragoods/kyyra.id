@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DigiFlazz Brand Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="brand-title">DigiFlazz Brand Page</h1>
+    <div id="content-container"></div>
+
+    <script>
+        // Get brand name from URL
+        const brand = window.location.pathname.slice(1);
+
+        // Fetch data from the local server
+        async function fetchData() {
+            const response = await fetch('http://localhost:3000/price-list');
+            const data = await response.json();
+            return data;
+        }
+
+        // Display data for the selected brand
+        async function displayBrandData() {
+            const data = await fetchData();
+            console.log(data); // Ensure data is being received
+            const brandData = data[brand];
+            const contentContainer = document.getElementById('content-container');
+            document.getElementById('brand-title').innerText = brand.replace(/-/g, ' ').toUpperCase();
+
+            if (brandData) {
+                brandData.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'item';
+                    itemDiv.innerHTML = `<strong>${item.product_name}</strong><br>Price: ${item.price}<br>Description: ${item.desc}`;
+                    contentContainer.appendChild(itemDiv);
+                });
+            } else {
+                contentContainer.innerHTML = '<p>No data available for this brand.</p>';
+            }
+        }
+
+        // Display brand data on page load
+        window.onload = displayBrandData;
+    </script>
+</body>
+</html>
